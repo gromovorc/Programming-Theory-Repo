@@ -5,17 +5,24 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     public float speed, turnSpeed;
-    public int damage;
-    private void Start()
+    public int damage, health = 100;
+
+    private void Update()
     {
+        if (health <= 0) Destroy(gameObject);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision other)
     {
-        if (collision.transform.CompareTag("Player"))
+        if (other.transform.CompareTag("Player"))
         {
-            Debug.Log(collision.transform.tag);
-            collision.gameObject.GetComponent<PlayerController>().ChangeHealth(-damage);
+            Debug.Log(other.transform.tag);
+            other.gameObject.GetComponent<PlayerController>().ChangeHealth(-damage);
         }
+    }
+
+    public void Hit(int amount)
+    {
+        health -= amount;
     }
 }
