@@ -1,24 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     Rigidbody playerRb;
     Gun gun;
-    [SerializeField] TextMeshProUGUI healthText;
+    [SerializeField] Text healthText;
 
+    [Header("Basic Information")]
     public float movingSpeed, turningSpeed;
+    public int maxHealth = 100;
+    [SerializeField] float timeInvincible = 2.0f;
+
+    public int health { get { return currentHealth; } }
+    int currentHealth;
+    float invincibleTimer;
+    bool isInvincible;
+
     float horizontalInput, verticalInput;
-    public int playerHealth = 100;
-    public bool gameOver;
     // Start is called before the first frame update
     void Start()
     {
-        playerRb = GetComponent<Rigidbody>();
-        healthText.SetText($"Health: {playerHealth}");
+        playerRb = GetComponent<Rigidbody>(); 
         gun = GetComponentInChildren<Gun>();
+        currentHealth = maxHealth; healthText.text = $"Health: {currentHealth}";
+
+        
     }
 
     private void Update()
@@ -31,6 +40,13 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             gun.Reload();
+        }
+
+        if (isInvincible)
+        {
+            invincibleTimer -= Time.deltaTime;
+            if (invincibleTimer < 0)
+                isInvincible = false;
         }
     }
 
@@ -50,10 +66,15 @@ public class PlayerController : MonoBehaviour
 
     public void ChangeHealth(int amount)
     {
-        if (!gameOver && playerHealth > 0)
+        if (amount < 0)
         {
-            playerHealth += amount;
-            healthText.SetText($"Health: {playerHealth}");
+            if (isInvincible) return;
+            {
+                isInvincible = true;
+                invincibleTimer = timeInvincible;
+            }
         }
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        healthText.text = $"Health: {currentHealth}";
     }
 }
