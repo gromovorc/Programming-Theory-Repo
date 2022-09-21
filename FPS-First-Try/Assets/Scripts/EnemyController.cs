@@ -15,7 +15,7 @@ public class EnemyController : MonoBehaviour
     public float moveSpeed, turnSpeed, onHitIncrease;
     
     [Header("BasicInformation")]
-    public int damage = 20, health = 100;
+    public int damage = 20, health = 100, scorePoints = 5;
     public float attackDelay = 2f;
 
     private float nextHit;
@@ -32,6 +32,7 @@ public class EnemyController : MonoBehaviour
         if (health <= 0)
         {
             spawnManager.enemysLeft--;
+            player.ChangeScore(scorePoints);
             Destroy(gameObject);
         }
         switch(state)
@@ -51,7 +52,7 @@ public class EnemyController : MonoBehaviour
 {
         if (other.transform.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerController>().ChangeHealth(-damage);
+            player.ChangeHealth(-damage);
             nextHit = Time.time + attackDelay;
             state = States.DamageDealt;
         }

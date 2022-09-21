@@ -18,7 +18,9 @@ public class HealthPack : MonoBehaviour
             if (player.health < player.maxHealth)
             {
                 player.ChangeHealth(healthAmount);
+                player.ChangeScore(-1);
                 Destroy(gameObject);
+                
             }
             
         }

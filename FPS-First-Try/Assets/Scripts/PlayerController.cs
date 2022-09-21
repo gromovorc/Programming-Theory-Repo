@@ -7,7 +7,10 @@ public class PlayerController : MonoBehaviour
 {
     Rigidbody playerRb;
     Gun gun;
-    [SerializeField] Text healthText;
+    GameManager gameManager;
+    [SerializeField] Text healthText, scoreText;
+    [SerializeField] TextMesh playerName;
+    public TextMesh ammoText;
 
     [Header("Basic Information")]
     public float movingSpeed, turningSpeed;
@@ -18,42 +21,45 @@ public class PlayerController : MonoBehaviour
     int currentHealth;
     float invincibleTimer;
     bool isInvincible;
-
     float horizontalInput, verticalInput;
     // Start is called before the first frame update
     void Start()
     {
         playerRb = GetComponent<Rigidbody>(); 
         gun = GetComponentInChildren<Gun>();
-        currentHealth = maxHealth; healthText.text = $"Health: {currentHealth}";
-
-        
+        gameManager = FindObjectOfType<GameManager>().GetComponent<GameManager>();
+        currentHealth = maxHealth; healthText.text = $"Health: {currentHealth}"; 
+        scoreText.text = $"Score: {gameManager.currentScore}";
+        playerName.text = SceneFlow.Instance.playerName;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (!gameManager.m_gameOver)
         {
-            gun.Shoot();
-        }
+            if (Input.GetMouseButton(0))
+            {
+                gun.Shoot();
+            }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            gun.Reload();
-        }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                gun.Reload();
+            }
 
-        if (isInvincible)
-        {
-            invincibleTimer -= Time.deltaTime;
-            if (invincibleTimer < 0)
-                isInvincible = false;
+            if (isInvincible)
+            {
+                invincibleTimer -= Time.deltaTime;
+                if (invincibleTimer < 0)
+                    isInvincible = false;
+            }
         }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        PlayerMove();
+        if (!gameManager.m_gameOver) PlayerMove();
     }
 
     void PlayerMove()
@@ -66,6 +72,10 @@ public class PlayerController : MonoBehaviour
 
     public void ChangeHealth(int amount)
     {
+        if (health < 1)
+        {
+            gameManager.GameOver();
+        }
         if (amount < 0)
         {
             if (isInvincible) return;
@@ -76,5 +86,11 @@ public class PlayerController : MonoBehaviour
         }
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         healthText.text = $"Health: {currentHealth}";
+    }
+
+    public void ChangeScore(int amount)
+    {
+        gameManager.currentScore += amount;
+        scoreText.text = $"Score: {gameManager.currentScore}";
     }
 }
