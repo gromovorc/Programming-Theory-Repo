@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,58 +6,112 @@ public class PlayerController : MonoBehaviour
     Rigidbody playerRb;
     Gun gun;
     GameManager gameManager;
-    [SerializeField] Text healthText, scoreText;
-    [SerializeField] TextMesh playerName;
-    public TextMesh ammoText;
+    [SerializeField]Image timerImage;
+
+    int currentScore;
 
     [Header("Basic Information")]
-    public float movingSpeed, turningSpeed;
-    public int maxHealth = 100;
+    public float basicMovingSpeed = 5.0f, basicTurningSpeed, knockoutForce;
+    public readonly int maxHealth = 100;
     [SerializeField] float timeInvincible = 2.0f;
 
     public int health { get { return currentHealth; } }
     int currentHealth;
-    float invincibleTimer;
-    bool isInvincible;
+    public float movingSpeed { get { return currentMovingSpeed; } }
+    float currentMovingSpeed;
+    public float turningSpeed { get { return currentTurningSpeed; } }
+    float currentTurningSpeed;
+
+    float invincibleTimer, debuffTime, debuffTimer, debuffMultiplier;
+    public bool isInvincible;
+
     float horizontalInput, verticalInput;
     // Start is called before the first frame update
+
+    public enum States 
+    { 
+        Normal,
+        Swallowed,
+        Slowed,
+        Boosted
+    }
+    public States state = States.Normal;
+
     void Start()
     {
-        playerRb = GetComponent<Rigidbody>(); 
+        playerRb = GetComponent<Rigidbody>();
         gun = GetComponentInChildren<Gun>();
         gameManager = FindObjectOfType<GameManager>().GetComponent<GameManager>();
-        currentHealth = maxHealth; healthText.text = $"Health: {currentHealth}"; 
-        scoreText.text = $"Score: {gameManager.currentScore}";
-        playerName.text = SceneFlow.Instance.playerName;
+        currentHealth = maxHealth;
+        currentMovingSpeed = basicMovingSpeed; currentTurningSpeed = basicTurningSpeed;
+        gameManager.healthText.text = $"Health: {currentHealth}";
     }
 
     private void Update()
     {
         if (!gameManager.m_gameOver)
         {
-            if (Input.GetMouseButton(0))
+            PlayerBehavior();
+            if (state != States.Swallowed)
             {
-                gun.Shoot();
-            }
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                gun.Reload();
-            }
-
-            if (isInvincible)
-            {
-                invincibleTimer -= Time.deltaTime;
-                if (invincibleTimer < 0)
-                    isInvincible = false;
+                if (Input.GetMouseButton(0)) gun.Shoot();
+                if (Input.GetKeyDown(KeyCode.R)) gun.Reload();
             }
         }
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         if (!gameManager.m_gameOver) PlayerMove();
+    }
+
+    void PlayerBehavior()
+    {
+
+        switch (state)
+        {
+            case States.Normal:
+                break;
+            case States.Swallowed:
+                TimerDisplay(Color.green);
+                break;
+            case States.Slowed:
+                if (movingSpeed >= basicMovingSpeed)
+                {
+                    currentMovingSpeed = basicMovingSpeed;
+                    ChangeSpeed(false);
+                } 
+                TimerDisplay(Color.magenta);
+                if (debuffTimer < 0)
+                {
+                    ChangeSpeed();
+                    ChangeState();
+                }
+                break;
+            case States.Boosted:
+                if (movingSpeed <= basicMovingSpeed)
+                {
+                    currentMovingSpeed = basicMovingSpeed;
+                    ChangeSpeed();
+                }
+                TimerDisplay(Color.yellow);
+                if (debuffTimer < 0)
+                {
+                    ChangeSpeed(false);
+                    ChangeState();
+                }
+                break;
+        }
+
+        if (isInvincible)
+        {
+            invincibleTimer -= Time.deltaTime;
+            if (invincibleTimer < 0)
+            {
+                isInvincible = false;
+
+            }
+        }
     }
 
     void PlayerMove()
@@ -76,7 +128,7 @@ public class PlayerController : MonoBehaviour
         {
             gameManager.GameOver();
         }
-        if (amount < 0)
+        if (amount < 0 && state != PlayerController.States.Swallowed)
         {
             if (isInvincible) return;
             {
@@ -85,12 +137,53 @@ public class PlayerController : MonoBehaviour
             }
         }
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        healthText.text = $"Health: {currentHealth}";
+        gameManager.healthText.text = $"Health: {currentHealth}";
+        playerRb.AddForce(Vector3.Normalize(Vector3.zero + gameObject.transform.position) * knockoutForce, ForceMode.Impulse);
+    }
+
+    public void ChangeState(States neededState = States.Normal)
+    {
+        timerImage.gameObject.SetActive(false);
+        state = neededState;
+    }
+    public void ChangeState(States neededState, float duration, float multiplier = 0.0f)
+    {
+        state = neededState;
+        debuffTime = duration;
+        debuffTimer = debuffTime;
+        debuffMultiplier = multiplier;
+        timerImage.gameObject.SetActive(true);
+        timerImage.GetComponentInChildren<Text>().text = neededState.ToString();
+    }
+
+    public void ChangeSpeed(bool isIncrementing = true)
+    {
+        if (isIncrementing)
+        {
+            currentMovingSpeed *= debuffMultiplier;
+            currentTurningSpeed *= debuffMultiplier;
+        }
+        else
+        {
+            currentMovingSpeed /= debuffMultiplier;
+            currentTurningSpeed /= debuffMultiplier;
+        }
     }
 
     public void ChangeScore(int amount)
     {
-        gameManager.currentScore += amount;
-        scoreText.text = $"Score: {gameManager.currentScore}";
+        currentScore += amount;
+        gameManager.scoreText.text = $"Score: {currentScore}";
+    }
+
+    private void TimerDisplay(Color color)
+    {
+        debuffTimer -= Time.deltaTime;
+        timerImage.fillAmount = Mathf.Clamp(debuffTimer / debuffTime, 0.0f, 1.0f);
+        if (timerImage.color != color)
+        {
+            timerImage.color = color;
+            timerImage.GetComponentInChildren<Text>().color = color;
+        }
     }
 }

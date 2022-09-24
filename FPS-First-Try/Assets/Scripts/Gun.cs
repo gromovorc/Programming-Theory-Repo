@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    private PlayerController player;
+    [SerializeField] TextMesh ammoText;
     public enum ShootingState
     {
         Ready,
@@ -33,9 +31,8 @@ public class Gun : MonoBehaviour
     private void Start()
     {
         muzzleOffset = GetComponent<MeshRenderer>().bounds.max.z + 0.3f;
-        player = GetComponentInParent<PlayerController>();
         remainingAmmunition = ammunition;
-        player.ammoText.text = $"{remainingAmmunition} / {ammunition}";
+        ammoText.text = $"{remainingAmmunition} / {ammunition}";
     }
     private void Update()
     {
@@ -51,7 +48,7 @@ public class Gun : MonoBehaviour
                 if (Time.time > nextShootTime)
                 {
                     remainingAmmunition = ammunition;
-                    player.ammoText.text = $"{remainingAmmunition} / {ammunition}";
+                    ammoText.text = $"{remainingAmmunition} / {ammunition}";
                     shootingState = ShootingState.Ready;
                 }
                 break;
@@ -74,7 +71,7 @@ public class Gun : MonoBehaviour
                 ammoRb.velocity = spawnedRound.transform.forward * roundSpeed;
 
             remainingAmmunition--;
-            player.ammoText.text = $"{remainingAmmunition} / {ammunition}";
+            ammoText.text = $"{remainingAmmunition} / {ammunition}";
             if (remainingAmmunition > 0)
             {
                 nextShootTime = Time.time + (1 / fireRate);
@@ -92,7 +89,7 @@ public class Gun : MonoBehaviour
         if (shootingState == ShootingState.Ready)
         {
             nextShootTime = Time.time + reloadTime;
-            player.ammoText.text = $"Reloading";
+            ammoText.text = $"Reloading";
             shootingState = ShootingState.Reloading;
         }
     }

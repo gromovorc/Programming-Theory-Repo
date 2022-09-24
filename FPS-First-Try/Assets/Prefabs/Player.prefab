@@ -308,14 +308,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3894220f3500b224785f817f77f72294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthText: {fileID: 0}
-  scoreText: {fileID: 0}
-  playerName: {fileID: 4571165376624739478}
+  timerImage: {fileID: 0}
   ammoText: {fileID: 4571165375358341799}
-  movingSpeed: 10
-  turningSpeed: 65
-  maxHealth: 100
+  basicMovingSpeed: 8
+  basicTurningSpeed: 65
+  knockoutForce: 2.5
   timeInvincible: 2.5
+  isInvincible: 0
+  state: 0
 --- !u!1 &4571165376624739476
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,6 +418,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4571165375902551054}
     m_Modifications:
+    - target: {fileID: 1855175882, guid: 6423a9106e633b449a5ed0688557f3a4, type: 3}
+      propertyPath: ammoText
+      value: 
+      objectReference: {fileID: 4571165375358341799}
     - target: {fileID: 398779188302630706, guid: 6423a9106e633b449a5ed0688557f3a4, type: 3}
       propertyPath: m_RootOrder
       value: 0
