@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     public Text healthText, scoreText;
     [SerializeField] GameObject gameOverText;
-    [SerializeField] TextMesh playerName;
+    [SerializeField] Text playerName;
 
     void Start()
     {

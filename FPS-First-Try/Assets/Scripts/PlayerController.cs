@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     int currentScore;
 
     [Header("Basic Information")]
-    public float basicMovingSpeed = 5.0f, basicTurningSpeed, knockoutForce;
+    public float basicMovingSpeed = 5.0f, basicTurningSpeed, knockForce;
     public readonly int maxHealth = 100;
     [SerializeField] float timeInvincible = 2.0f;
 
@@ -24,9 +24,6 @@ public class PlayerController : MonoBehaviour
 
     float invincibleTimer, debuffTime, debuffTimer, debuffMultiplier;
     public bool isInvincible;
-
-    float horizontalInput, verticalInput;
-    // Start is called before the first frame update
 
     public enum States 
     { 
@@ -55,7 +52,7 @@ public class PlayerController : MonoBehaviour
             if (state != States.Swallowed)
             {
                 if (Input.GetMouseButton(0)) gun.Shoot();
-                if (Input.GetKeyDown(KeyCode.R)) gun.Reload();
+                if (Input.GetKeyDown(KeyCode.R) && gun.remainingAmmunition != gun.ammunition) gun.Reload();
             }
         }
     }
@@ -116,9 +113,9 @@ public class PlayerController : MonoBehaviour
 
     void PlayerMove()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalInput = Input.GetAxis("Horizontal");
         transform.Rotate(Vector3.up, horizontalInput * turningSpeed * Time.deltaTime);
-        verticalInput = Input.GetAxis("Vertical");
+        float verticalInput = Input.GetAxis("Vertical");
         playerRb.AddRelativeForce(Vector3.forward * verticalInput * movingSpeed);
     }
 
@@ -138,7 +135,7 @@ public class PlayerController : MonoBehaviour
         }
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         gameManager.healthText.text = $"Health: {currentHealth}";
-        playerRb.AddForce(Vector3.Normalize(Vector3.zero + gameObject.transform.position) * knockoutForce, ForceMode.Impulse);
+        playerRb.AddForce(Vector3.Normalize(Vector3.zero + gameObject.transform.position) * knockForce, ForceMode.Impulse);
     }
 
     public void ChangeState(States neededState = States.Normal)
@@ -179,7 +176,7 @@ public class PlayerController : MonoBehaviour
     private void TimerDisplay(Color color)
     {
         debuffTimer -= Time.deltaTime;
-        timerImage.fillAmount = Mathf.Clamp(debuffTimer / debuffTime, 0.0f, 1.0f);
+        timerImage.fillAmount = Mathf.Clamp01(debuffTimer / debuffTime);
         if (timerImage.color != color)
         {
             timerImage.color = color;

@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    [SerializeField] TextMesh ammoText;
+    [SerializeField] UnityEngine.UI.Text ammoText;
+    [SerializeField] UnityEngine.UI.Image ammoImage;
     public enum ShootingState
     {
         Ready,
@@ -18,7 +19,8 @@ public class Gun : MonoBehaviour
 
     [Range(2f, 5.0f)] public float reloadTime;
 
-    private int remainingAmmunition;
+    public int remainingAmmunition { get; private set; }
+    private float remainingReloadTime;
 
     [Header("Shooting")]
     [Range(1.6f, 25.0f)] public float fireRate;
@@ -45,10 +47,13 @@ public class Gun : MonoBehaviour
                 }
                 break;
             case ShootingState.Reloading:
+                if (!ammoImage.gameObject.activeInHierarchy) ammoImage.gameObject.SetActive(true);
+                ReloadTimerDisplay();
                 if (Time.time > nextShootTime)
                 {
                     remainingAmmunition = ammunition;
                     ammoText.text = $"{remainingAmmunition} / {ammunition}";
+                    ammoImage.gameObject.SetActive(false);
                     shootingState = ShootingState.Ready;
                 }
                 break;
@@ -89,8 +94,16 @@ public class Gun : MonoBehaviour
         if (shootingState == ShootingState.Ready)
         {
             nextShootTime = Time.time + reloadTime;
+            remainingReloadTime = reloadTime;
             ammoText.text = $"Reloading";
             shootingState = ShootingState.Reloading;
         }
+    }
+
+    private void ReloadTimerDisplay()
+    {
+        remainingReloadTime -= Time.deltaTime;
+        ammoImage.fillAmount = Mathf.Clamp01(remainingReloadTime / reloadTime);
+
     }
 }
