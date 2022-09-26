@@ -3,8 +3,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] enemyPrefabs;
-    [SerializeField] private GameObject specialEnemyPrefab;
-    [SerializeField] private GameObject healthPackPrefab;
+    [SerializeField] private GameObject specialEnemyPrefab, healthPackPrefab;
     private int spawnIndex, count;
     private float healthPoint = 9.0f;
     private Transform[] spawnpoints;

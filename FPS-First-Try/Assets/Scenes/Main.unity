@@ -2532,14 +2532,6 @@ PrefabInstance:
       propertyPath: m_Avatar
       value: 
       objectReference: {fileID: 638410125}
-    - target: {fileID: 4571165375358341797, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
-      propertyPath: m_Layer
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4571165375358341799, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
-      propertyPath: m_Text
-      value: Reloading
-      objectReference: {fileID: 0}
     - target: {fileID: 4571165375902551050, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2589,9 +2581,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4571165375902551055, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
+      propertyPath: state
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571165375902551055, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
       propertyPath: timerImage
       value: 
       objectReference: {fileID: 602630798}
+    - target: {fileID: 4571165375902551055, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
+      propertyPath: isInvincible
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4571165377032688234, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
       propertyPath: ammoText
       value: 

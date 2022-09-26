@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
         currentScore = 0;
         playerName.text = SceneFlow.Instance.playerName;
         scoreText.text = $"Score: {currentScore}";
-
     }
 
     // Update is called once per frame

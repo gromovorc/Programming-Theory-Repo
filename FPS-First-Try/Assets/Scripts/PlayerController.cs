@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
 
     float invincibleTimer, debuffTime, debuffTimer, debuffMultiplier;
     public bool isInvincible;
-
+    
+    [HideInInspector]
     public enum States 
     { 
         Normal,

@@ -214,7 +214,7 @@ MonoBehaviour:
   timerImage: {fileID: 0}
   basicMovingSpeed: 8
   basicTurningSpeed: 65
-  knockForce: 0
+  knockForce: 2.5
   timeInvincible: 2.5
   isInvincible: 0
   state: 0
