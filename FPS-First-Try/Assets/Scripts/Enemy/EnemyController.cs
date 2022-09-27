@@ -4,6 +4,8 @@ public abstract class EnemyController : MonoBehaviour
 {
     protected PlayerController player;
     protected SpawnManager spawnManager;
+    protected GameManager gameManager;
+
     public enum States
     {
         Chasing,
@@ -11,20 +13,28 @@ public abstract class EnemyController : MonoBehaviour
         DamageDone
     }
     [Header("Movement")]
-    public float moveSpeed, turnSpeed, onHitIncrease;
+    public float onHitIncrease;
+    [SerializeField][Range(1.0f, 6.0f)] private protected float moveSpeed;
+    [SerializeField][Range(1.0f, 10.0f)] private protected float turnSpeed;
 
     [Header("Basic Information")]
     public int damage = 20, health = 100, scorePoints = 5;
     public float attackDelay = 2f;
 
     private protected float nextHit;
+    private protected bool onDeathDrop = false;
 
     private protected States state = States.Chasing;
 
-    protected void Start()
+    private void Awake()
     {
         player = FindObjectOfType<PlayerController>().GetComponent<PlayerController>();
         spawnManager = FindObjectOfType<SpawnManager>().GetComponent<SpawnManager>();
+        gameManager = FindObjectOfType<GameManager>().GetComponent<GameManager>();
+    }
+    protected void Start()
+    {
+        if (Random.Range(1, 10) == 1) onDeathDrop = true;
         OnWaveIncrease(spawnManager.waveCount);
     }
 
@@ -43,21 +53,21 @@ public abstract class EnemyController : MonoBehaviour
 
     protected Vector3 GetLookDir(GameObject target)
     {
-         var look_dir = target.transform.position - gameObject.transform.position; look_dir.y = 0;
+         var look_dir = target.transform.position - transform.position; look_dir.y = 0;
         return look_dir;
     }
     protected void Moving(Vector3 look_dir)
     {
         
         gameObject.transform.rotation = Quaternion.Slerp(gameObject.transform.rotation, Quaternion.LookRotation(look_dir), turnSpeed * Time.deltaTime);
-        gameObject.transform.position += gameObject.transform.forward * moveSpeed * Time.deltaTime;
+        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
 
     }
 
-    private protected virtual void Death()
+    private protected void Death()
     {
         spawnManager.EnemyDead();
-        player.ChangeScore(scorePoints);
+        gameManager.ChangeScore(scorePoints);
         Destroy(gameObject);
     }
 

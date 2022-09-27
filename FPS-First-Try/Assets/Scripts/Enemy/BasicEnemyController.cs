@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class BasicEnemyController : EnemyController
 {
-
     protected override void EnemyBehavior()
     {
         switch (state)
@@ -25,11 +24,11 @@ public class BasicEnemyController : EnemyController
         state = States.DamageDone;
     }
     
-    private protected override void Death()
+    new private protected void Death()
     {
         spawnManager.EnemyDead();
-        player.ChangeScore(scorePoints);
-        if (Random.Range(1, 10) == 1) spawnManager.SpawnSpecialEnemy();
+        gameManager.ChangeScore(scorePoints);
+        if (onDeathDrop) spawnManager.SpawnSpecialEnemy();
         Destroy(gameObject);
     }
 }

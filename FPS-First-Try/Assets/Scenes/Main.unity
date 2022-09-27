@@ -1578,8 +1578,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefabs:
-  - {fileID: 2951716209839414706, guid: 0e8f631c1bc79f540a267078b791901c, type: 3}
-  - {fileID: 2565535422008748342, guid: 3908363019790d647927fb26bb4338bf, type: 3}
   - {fileID: 2847792688941546563, guid: 57d9e90c260f0eb49bda925f83d90a48, type: 3}
   specialEnemyPrefab: {fileID: 4104897155587671208, guid: 8b7b2715b2b89ab43b0e0833a59b1800, type: 3}
   healthPackPrefab: {fileID: 6195123435880206504, guid: 0e7889d19923006458e09308400a1057, type: 3}
@@ -2589,8 +2587,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 602630798}
     - target: {fileID: 4571165375902551055, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
+      propertyPath: sensitivity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571165375902551055, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
       propertyPath: isInvincible
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571165375902551055, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
+      propertyPath: basicMovingSpeed
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571165375902551536, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571165375902551536, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 4571165377032688234, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
       propertyPath: ammoText

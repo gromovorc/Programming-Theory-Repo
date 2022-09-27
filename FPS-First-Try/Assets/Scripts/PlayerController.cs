@@ -8,10 +8,8 @@ public class PlayerController : MonoBehaviour
     GameManager gameManager;
     [SerializeField]Image timerImage;
 
-    int currentScore;
-
     [Header("Basic Information")]
-    public float basicMovingSpeed = 5.0f, basicTurningSpeed, knockForce;
+    public float basicMovingSpeed, sensitivity, knockForce;
     public readonly int maxHealth = 100;
     [SerializeField] float timeInvincible = 2.0f;
 
@@ -21,6 +19,18 @@ public class PlayerController : MonoBehaviour
     float currentMovingSpeed;
     public float turningSpeed { get { return currentTurningSpeed; } }
     float currentTurningSpeed;
+
+    private Vector3 movementVector
+    {
+        get
+        {
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
+
+            return new Vector3(horizontalInput, 0.0f, verticalInput);
+        }
+    }
+
 
     float invincibleTimer, debuffTime, debuffTimer, debuffMultiplier;
     public bool isInvincible;
@@ -33,15 +43,20 @@ public class PlayerController : MonoBehaviour
         Slowed,
         Boosted
     }
+    [HideInInspector]
     public States state = States.Normal;
 
-    void Start()
+    private void Awake()
     {
         playerRb = GetComponent<Rigidbody>();
         gun = GetComponentInChildren<Gun>();
         gameManager = FindObjectOfType<GameManager>().GetComponent<GameManager>();
+    }
+
+    void Start()
+    {
         currentHealth = maxHealth;
-        currentMovingSpeed = basicMovingSpeed; currentTurningSpeed = basicTurningSpeed;
+        currentMovingSpeed = basicMovingSpeed; currentTurningSpeed = sensitivity;
         gameManager.healthText.text = $"Health: {currentHealth}";
     }
 
@@ -50,6 +65,7 @@ public class PlayerController : MonoBehaviour
         if (!gameManager.m_gameOver)
         {
             PlayerBehavior();
+            MouseMove();
             if (state != States.Swallowed)
             {
                 if (Input.GetMouseButton(0)) gun.Shoot();
@@ -114,12 +130,14 @@ public class PlayerController : MonoBehaviour
 
     void PlayerMove()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        transform.Rotate(Vector3.up, horizontalInput * turningSpeed * Time.deltaTime);
-        float verticalInput = Input.GetAxis("Vertical");
-        playerRb.AddRelativeForce(Vector3.forward * verticalInput * movingSpeed);
+        transform.Translate(movementVector * movingSpeed * Time.fixedDeltaTime, Space.Self);
     }
 
+    void MouseMove()
+    {
+        float mousePos = Input.GetAxis("Mouse X");
+        transform.Rotate(0.0f, mousePos * turningSpeed, 0.0f);
+    }
     public void ChangeHealth(int amount)
     {
         if (health < 1)
@@ -166,12 +184,6 @@ public class PlayerController : MonoBehaviour
             currentMovingSpeed /= debuffMultiplier;
             currentTurningSpeed /= debuffMultiplier;
         }
-    }
-
-    public void ChangeScore(int amount)
-    {
-        currentScore += amount;
-        gameManager.scoreText.text = $"Score: {currentScore}";
     }
 
     private void TimerDisplay(Color color)

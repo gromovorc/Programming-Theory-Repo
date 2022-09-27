@@ -24,12 +24,21 @@ public class SlowingEnemyController : EnemyController
                 break;
         }
     }
-    private protected override void Death()
+    new private protected void Death()
     {
         spawnManager.EnemyDead();
-        player.ChangeScore(scorePoints);
-        if (Random.Range(1, 10) == 1) player.ChangeState(PlayerController.States.Boosted, slowDuration, slowMultiplier);
+        gameManager.ChangeScore(scorePoints);
         Destroy(gameObject);
+    }
+
+    override public void Hit(int amount)
+    {
+        health -= amount;
+        if (health < 1)
+        {
+             if (onDeathDrop) player.ChangeState(PlayerController.States.Boosted, slowDuration, slowMultiplier);
+             Death();
+        }
     }
 }
 

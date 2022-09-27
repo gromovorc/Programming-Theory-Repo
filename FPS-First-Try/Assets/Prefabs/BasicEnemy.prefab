@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 6
-  turnSpeed: 50
+  turnSpeed: 5
   onHitIncrease: 1.5
   damage: 15
   health: 120

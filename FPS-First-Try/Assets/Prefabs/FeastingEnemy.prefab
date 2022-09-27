@@ -125,9 +125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d935964201ff2c44ba7fb7533bf143aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  turnSpeed: 35
   onHitIncrease: 1
+  moveSpeed: 5
+  turnSpeed: 2.5
   damage: 2
   health: 100
   scorePoints: 8

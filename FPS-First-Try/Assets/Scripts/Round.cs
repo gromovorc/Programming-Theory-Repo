@@ -9,7 +9,7 @@ public class Round : MonoBehaviour
     {
         EnemyController enemy = other.gameObject.GetComponent<EnemyController>();
 
-        if (enemy != null)
+        if (enemy != null && enemy.health > 0)
         {
             enemy.Hit(damage);
             Destroy(gameObject);
