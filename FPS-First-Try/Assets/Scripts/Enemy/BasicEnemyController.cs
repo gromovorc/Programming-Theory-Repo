@@ -18,13 +18,14 @@ public class BasicEnemyController : EnemyController
     }
 
     protected override void Damaging()
-    {
+    { 
+        audioSource.PlayOneShot(attackSound);
         player.ChangeHealth(-damage);
         nextHit = Time.time + attackDelay;
         state = States.DamageDone;
     }
     
-    new private protected void Death()
+    private override protected void Death()
     {
         spawnManager.EnemyDead();
         gameManager.ChangeScore(scorePoints);

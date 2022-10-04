@@ -11,9 +11,15 @@ using UnityEngine.UI;
 [DefaultExecutionOrder(1000)]
 public class MenuUIManager : MonoBehaviour
 {
-    [SerializeField] private InputField playerNameField;
+    [SerializeField] private InputField playerNameField, sensitivityField;
     [SerializeField] private Text bestPlayer;
-    // Start is called before the first frame update
+    [SerializeField] private Slider volumeSlider, sensitivitySlider;
+
+    [SerializeField] private Animator startButton, settingsButton, settingsDialog, playerName;
+
+    public static float volume;
+    [Range(0.1f, 6.0f)]public static float sensitivity;
+
     private void Awake()
     {
         SceneFlow.Instance.LoadHighScore();
@@ -34,8 +40,51 @@ public class MenuUIManager : MonoBehaviour
 #endif
     }
 
-    public void GetPlayerName()
+    public void GetPlayerName() => SceneFlow.Instance.playerName = playerNameField.text;
+
+    public void OpenSettings()
     {
-        SceneFlow.Instance.playerName = playerNameField.text;
+        startButton.SetBool("isHidden", true);
+        settingsButton.SetBool("isHidden", true);
+        playerName.SetBool("isHidden", true);
+        settingsDialog.SetBool("isHidden", false);
+    }
+
+    public void CloseSettings()
+    {
+        startButton.SetBool("isHidden", false);
+        settingsButton.SetBool("isHidden", false);
+        playerName.SetBool("isHidden", false);
+        settingsDialog.SetBool("isHidden", true);
+    }
+
+    public void VolumeChange() => volume = volumeSlider.value;
+
+    public void SensitivityChangeSlider()
+    {
+        sensitivity = sensitivitySlider.value;
+        sensitivityField.text = sensitivitySlider.value.ToString();
+    }
+
+    public void SensitivityChangeText()
+    {
+        if (float.TryParse(sensitivityField.text, out float value))
+        {
+            sensitivityField.text = value.ToString();
+            sensitivity = value;
+            sensitivitySlider.value = sensitivity;
+        }
+        else
+        {
+            sensitivityField.text = 0.0f.ToString();
+            sensitivitySlider.value = 0.0f;
+        }
+    }
+
+    private void OnEnable()
+    {
+        volumeSlider.value = volume;
+        sensitivitySlider.value = sensitivity;
+        sensitivityField.text = sensitivity.ToString();
     }
 }

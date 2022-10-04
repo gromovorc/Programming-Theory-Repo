@@ -4,15 +4,17 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    bool m_started = false;
+    private bool m_started = false;
     public bool m_gameOver;
     public int currentScore;
 
-    public Text healthText, scoreText;
-    [SerializeField] GameObject gameOverText;
-    [SerializeField] Text playerName;
+    public float volume;
 
-    void Start()
+    public Text healthText, scoreText;
+    [SerializeField] private GameObject gameOverText;
+    [SerializeField] private Text playerName;
+
+    private void Start()
     {
         currentScore = 0;
         playerName.text = SceneFlow.Instance.playerName;
@@ -20,9 +22,11 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Escape)) SceneManager.LoadScene(0);
+
         if (!m_started)
         {
             if (Input.GetKeyDown(KeyCode.Space))

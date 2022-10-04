@@ -6,11 +6,13 @@ public class HealingEnemyController : EnemyController
     HealthPack healthPack;
     [SerializeField] private int healAmount;
     [SerializeField] private float radius, healingRate;
+    [SerializeField] private AudioClip healSound;
 
-    bool needHealing;
+    private bool needHealing;
 
     new private void Start()
     {
+        audioSource.volume *= MenuUIManager.volume;
         InvokeRepeating(nameof(Damaging), 0.5f, 10.0f);
         OnWaveIncrease(spawnManager.waveCount);
         if (UnityEngine.Random.Range(1, 20) == 1) onDeathDrop = true;
@@ -53,6 +55,7 @@ public class HealingEnemyController : EnemyController
     protected override void Damaging()
     {
         Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, radius);
+        audioSource.PlayOneShot(healSound);
         foreach (Collider collider in hitColliders)
         {
             EnemyController enemy = collider.GetComponent<EnemyController>();
@@ -83,7 +86,7 @@ public class HealingEnemyController : EnemyController
         }
     }
 
-    new private protected void Death()
+    private override protected void Death()
     {
         gameManager.ChangeScore(scorePoints);
         if (onDeathDrop) spawnManager.SpawnHealthPack();

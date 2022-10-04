@@ -5,10 +5,14 @@ public class SlowingEnemyController : EnemyController
     [SerializeField] private float slowMultiplier, slowDuration;
     protected override void Damaging() 
     {
-        player.ChangeHealth(-damage);
-        player.ChangeState(PlayerController.States.Slowed, slowDuration, slowMultiplier);
-        nextHit = Time.time + attackDelay;
-        state = States.DamageDone;
+        if (player.state != PlayerController.States.Swallowed)
+        {
+            player.ChangeHealth(-damage);
+            audioSource.PlayOneShot(attackSound);
+            player.ChangeState(PlayerController.States.Slowed, slowDuration, slowMultiplier);
+            nextHit = Time.time + attackDelay;
+            state = States.DamageDone;
+        }
     }
     protected override void EnemyBehavior()
     {
@@ -24,14 +28,14 @@ public class SlowingEnemyController : EnemyController
                 break;
         }
     }
-    new private protected void Death()
+    private override protected void Death()
     {
         spawnManager.EnemyDead();
         gameManager.ChangeScore(scorePoints);
         Destroy(gameObject);
     }
 
-    override public void Hit(int amount)
+    public override void Hit(int amount)
     {
         health -= amount;
         if (health < 1)

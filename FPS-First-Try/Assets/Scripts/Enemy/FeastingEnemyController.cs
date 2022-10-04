@@ -3,7 +3,7 @@ using UnityEngine;
 public class FeastingEnemyController : EnemyController
 {
     private float nextTick = 1.0f;
-    [SerializeField] private int damageTicks = 2;
+    [SerializeField] private int damageTicks = 2;    
 
     protected override void EnemyBehavior()
     {
@@ -24,8 +24,12 @@ public class FeastingEnemyController : EnemyController
                     }
                     else
                     {
-                        if(player.state != PlayerController.States.Swallowed) 
+                        if (player.state != PlayerController.States.Swallowed)
+                        {
                             player.ChangeState(PlayerController.States.Swallowed, (float)damageTicks);
+                            audioSource.Stop();
+                            audioSource.PlayOneShot(attackSound);
+                        }
                         gameObject.transform.position = player.transform.position + Vector3.back;
                         if (damageTicks > 0)
                         {
@@ -40,6 +44,7 @@ public class FeastingEnemyController : EnemyController
                         else
                         {
                             player.ChangeState();
+                            audioSource.Stop();
                             damageTicks = 2;
                             nextHit = Time.time + attackDelay;
                             state = States.DamageDone;

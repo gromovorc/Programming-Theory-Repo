@@ -150,8 +150,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 85162718}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 50, y: 20, z: 0}
-  m_LocalScale: {x: 100, y: 40, z: 1}
+  m_LocalPosition: {x: 55, y: 20, z: 0}
+  m_LocalScale: {x: 100, y: 40, z: 10}
   m_Children: []
   m_Father: {fileID: 1242226898}
   m_RootOrder: 3
@@ -547,8 +547,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 500139406}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 20, z: 50}
-  m_LocalScale: {x: 100, y: 40, z: 1}
+  m_LocalPosition: {x: 0, y: 20, z: 55}
+  m_LocalScale: {x: 100, y: 40, z: 10}
   m_Children: []
   m_Father: {fileID: 1242226898}
   m_RootOrder: 1
@@ -1383,8 +1383,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000276090}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 20, z: -50}
-  m_LocalScale: {x: 100, y: 40, z: 1}
+  m_LocalPosition: {x: 0, y: 20, z: -55}
+  m_LocalScale: {x: 100, y: 40, z: 10}
   m_Children: []
   m_Father: {fileID: 1242226898}
   m_RootOrder: 2
@@ -1578,6 +1578,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefabs:
+  - {fileID: 2951716209839414706, guid: 0e8f631c1bc79f540a267078b791901c, type: 3}
+  - {fileID: 2565535422008748342, guid: 3908363019790d647927fb26bb4338bf, type: 3}
   - {fileID: 2847792688941546563, guid: 57d9e90c260f0eb49bda925f83d90a48, type: 3}
   specialEnemyPrefab: {fileID: 4104897155587671208, guid: 8b7b2715b2b89ab43b0e0833a59b1800, type: 3}
   healthPackPrefab: {fileID: 6195123435880206504, guid: 0e7889d19923006458e09308400a1057, type: 3}
@@ -1944,8 +1946,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1291303760}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -50, y: 20, z: 0}
-  m_LocalScale: {x: 100, y: 40, z: 1}
+  m_LocalPosition: {x: -55, y: 20, z: 0}
+  m_LocalScale: {x: 100, y: 40, z: 10}
   m_Children: []
   m_Father: {fileID: 1242226898}
   m_RootOrder: 4
@@ -2526,6 +2528,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 613754713445546075, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
+      propertyPath: ammoText
+      value: 
+      objectReference: {fileID: 2089208710}
+    - target: {fileID: 613754713445546075, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
+      propertyPath: ammoImage
+      value: 
+      objectReference: {fileID: 1464981239}
     - target: {fileID: 3581317811145947947, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
       propertyPath: m_Avatar
       value: 
@@ -2579,40 +2589,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4571165375902551055, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
-      propertyPath: state
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4571165375902551055, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
       propertyPath: timerImage
       value: 
       objectReference: {fileID: 602630798}
-    - target: {fileID: 4571165375902551055, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
-      propertyPath: sensitivity
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4571165375902551055, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
-      propertyPath: isInvincible
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4571165375902551055, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
-      propertyPath: basicMovingSpeed
-      value: 6.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4571165375902551536, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4571165375902551536, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
-    - target: {fileID: 4571165377032688234, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
-      propertyPath: ammoText
-      value: 
-      objectReference: {fileID: 2089208710}
-    - target: {fileID: 4571165377032688234, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}
-      propertyPath: ammoImage
-      value: 
-      objectReference: {fileID: 1464981239}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c7c6dcc9e505ed489d721b0e09ee37c, type: 3}

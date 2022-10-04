@@ -6,6 +6,10 @@ public abstract class EnemyController : MonoBehaviour
     protected SpawnManager spawnManager;
     protected GameManager gameManager;
 
+    private protected AudioSource audioSource;
+    [SerializeField] private protected AudioClip attackSound;
+
+    [HideInInspector]
     public enum States
     {
         Chasing,
@@ -31,9 +35,11 @@ public abstract class EnemyController : MonoBehaviour
         player = FindObjectOfType<PlayerController>().GetComponent<PlayerController>();
         spawnManager = FindObjectOfType<SpawnManager>().GetComponent<SpawnManager>();
         gameManager = FindObjectOfType<GameManager>().GetComponent<GameManager>();
+        audioSource = GetComponent<AudioSource>();
     }
     protected void Start()
     {
+        audioSource.volume *= MenuUIManager.volume;
         if (Random.Range(1, 10) == 1) onDeathDrop = true;
         OnWaveIncrease(spawnManager.waveCount);
     }
@@ -58,13 +64,12 @@ public abstract class EnemyController : MonoBehaviour
     }
     protected void Moving(Vector3 look_dir)
     {
-        
         gameObject.transform.rotation = Quaternion.Slerp(gameObject.transform.rotation, Quaternion.LookRotation(look_dir), turnSpeed * Time.deltaTime);
         transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
 
     }
 
-    private protected void Death()
+    private virtual protected void Death()
     {
         spawnManager.EnemyDead();
         gameManager.ChangeScore(scorePoints);

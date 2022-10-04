@@ -28,6 +28,7 @@ public class SceneFlow : MonoBehaviour
     {
         public int bestScore;
         public string bestPlayerName;
+        public float volume, sensitivity;
     }
 
     public void SaveHighScore()
@@ -35,6 +36,8 @@ public class SceneFlow : MonoBehaviour
         SaveData data = new SaveData();
         data.bestScore = bestScore;
         data.bestPlayerName = bestPlayer;
+        data.volume = MenuUIManager.volume;
+        data.sensitivity = MenuUIManager.sensitivity;
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
@@ -49,6 +52,8 @@ public class SceneFlow : MonoBehaviour
 
             bestScore = data.bestScore;
             bestPlayer = data.bestPlayerName;
+            MenuUIManager.volume = data.volume;
+            MenuUIManager.sensitivity = data.sensitivity;
         }
     }
 }
