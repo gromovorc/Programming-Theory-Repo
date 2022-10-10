@@ -112,10 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7957b9c5a179aa84988b3c56ac42ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackSound: {fileID: 8300000, guid: d308a80ed23b44c359b18edb48fbb38c, type: 3}
-  onHitIncrease: 0
-  moveSpeed: 4
-  turnSpeed: 3.8
+  _parentTransform: {fileID: 0}
+  _attackSound: {fileID: 8300000, guid: d308a80ed23b44c359b18edb48fbb38c, type: 3}
   damage: 5
   health: 100
   scorePoints: 5

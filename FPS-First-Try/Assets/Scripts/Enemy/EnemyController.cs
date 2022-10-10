@@ -2,12 +2,18 @@ using UnityEngine;
 
 public abstract class EnemyController : MonoBehaviour
 {
-    protected PlayerController player;
-    protected SpawnManager spawnManager;
-    protected GameManager gameManager;
+    private protected PlayerController _player;
+    private protected SpawnManager _spawnManager;
+    private protected GameManager _gameManager;
 
-    private protected AudioSource audioSource;
-    [SerializeField] private protected AudioClip attackSound;
+    private protected EnemyMoving _moving;
+
+    private protected Animation _animation;
+
+    [SerializeField]private protected Transform _parentTransform;
+
+    private protected AudioSource _audioSource;
+    [SerializeField] private protected AudioClip _attackSound;
 
     [HideInInspector]
     public enum States
@@ -16,10 +22,7 @@ public abstract class EnemyController : MonoBehaviour
         SpecialAttack,
         DamageDone
     }
-    [Header("Movement")]
-    public float onHitIncrease;
-    [SerializeField][Range(1.0f, 6.0f)] private protected float moveSpeed;
-    [SerializeField][Range(1.0f, 10.0f)] private protected float turnSpeed;
+
 
     [Header("Basic Information")]
     public int damage = 20, health = 100, scorePoints = 5;
@@ -32,16 +35,18 @@ public abstract class EnemyController : MonoBehaviour
 
     private void Awake()
     {
-        player = FindObjectOfType<PlayerController>().GetComponent<PlayerController>();
-        spawnManager = FindObjectOfType<SpawnManager>().GetComponent<SpawnManager>();
-        gameManager = FindObjectOfType<GameManager>().GetComponent<GameManager>();
-        audioSource = GetComponent<AudioSource>();
+        _player = FindObjectOfType<PlayerController>().GetComponent<PlayerController>();
+        _spawnManager = FindObjectOfType<SpawnManager>().GetComponent<SpawnManager>();
+        _gameManager = FindObjectOfType<GameManager>().GetComponent<GameManager>();
+        _audioSource = GetComponent<AudioSource>();
+        _animation = GetComponent<Animation>();
+        _moving = GetComponent<EnemyMoving>();
     }
     protected void Start()
     {
-        audioSource.volume *= MenuUIManager.volume;
+        _audioSource.volume *= MenuUIManager.volume;
         if (Random.Range(1, 10) == 1) onDeathDrop = true;
-        OnWaveIncrease(spawnManager.waveCount);
+        OnWaveIncrease(_spawnManager.waveCount);
     }
 
     protected void Update()
@@ -52,28 +57,25 @@ public abstract class EnemyController : MonoBehaviour
     public virtual void Hit(int amount)
     {
         health -= amount;
-        moveSpeed += onHitIncrease; 
-        turnSpeed += onHitIncrease;
+        _moving.OnHitIncrease();
         if (health < 1) Death();
-    }
-
-    protected Vector3 GetLookDir(GameObject target)
-    {
-         var look_dir = target.transform.position - transform.position; look_dir.y = 0;
-        return look_dir;
-    }
-    protected void Moving(Vector3 look_dir)
-    {
-        gameObject.transform.rotation = Quaternion.Slerp(gameObject.transform.rotation, Quaternion.LookRotation(look_dir), turnSpeed * Time.deltaTime);
-        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
-
     }
 
     private virtual protected void Death()
     {
-        spawnManager.EnemyDead();
-        gameManager.ChangeScore(scorePoints);
-        Destroy(gameObject);
+        _spawnManager.EnemyDead();
+        _gameManager.ChangeScore(scorePoints);
+
+        PlayDeathAnimation();
+    }
+
+    private protected void PlayDeathAnimation()
+    {
+        _parentTransform.position = gameObject.transform.position;
+        gameObject.transform.position = Vector3.zero;
+        gameObject.transform.position = Vector3.zero;
+        _animation.Play("Death");
+        Destroy(_parentTransform.gameObject, 1.5f);
     }
 
     protected abstract void EnemyBehavior();

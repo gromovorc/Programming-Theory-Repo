@@ -11,12 +11,12 @@ public class FeastingEnemyController : EnemyController
         switch (state)
         {
             case States.Chasing:
-                
-                Moving(GetLookDir(player.gameObject));
+
+                _moving.Moving(_moving.GetLookDir(_player.gameObject));
                 break;
             case States.SpecialAttack:
                 {
-                    if (player.isInvincible)
+                    if (_player.isInvincible)
                     {
                         nextHit = Time.time + attackDelay;
                         state = States.DamageDone;
@@ -24,27 +24,27 @@ public class FeastingEnemyController : EnemyController
                     }
                     else
                     {
-                        if (player.state != PlayerController.States.Swallowed)
+                        if (_player.state != PlayerController.States.Swallowed)
                         {
-                            player.ChangeState(PlayerController.States.Swallowed, (float)damageTicks);
-                            audioSource.Stop();
-                            audioSource.PlayOneShot(attackSound);
+                            _player.ChangeState(PlayerController.States.Swallowed, (float)damageTicks);
+                            _audioSource.Stop();
+                            _audioSource.PlayOneShot(_attackSound);
                         }
-                        gameObject.transform.position = player.transform.position + Vector3.back;
+                        gameObject.transform.position = _player.transform.position + Vector3.back;
                         if (damageTicks > 0)
                         {
                             nextTick -= Time.deltaTime;
                             if (nextTick < 0)
                             {
-                                player.ChangeHealth(-damage);
+                                _player.ChangeHealth(-damage);
                                 nextTick = 1.0f;
                                 damageTicks--;
                             }
                         }
                         else
                         {
-                            player.ChangeState();
-                            audioSource.Stop();
+                            _player.ChangeState();
+                            _audioSource.Stop();
                             damageTicks = 2;
                             nextHit = Time.time + attackDelay;
                             state = States.DamageDone;
@@ -56,14 +56,14 @@ public class FeastingEnemyController : EnemyController
                 
             case States.DamageDone:
                 if (Time.time > nextHit) state = States.Chasing;
-                else Moving(-GetLookDir(player.gameObject));
+                else _moving.Moving(-_moving.GetLookDir(_player.gameObject));
                 break;
         }
 
     }
      protected override void Damaging()
     {
-        if (player.state != PlayerController.States.Swallowed)
+        if (_player.state != PlayerController.States.Swallowed)
         {
             state = States.SpecialAttack;
         }

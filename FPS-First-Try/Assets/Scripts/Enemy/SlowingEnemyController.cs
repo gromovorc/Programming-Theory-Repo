@@ -5,11 +5,11 @@ public class SlowingEnemyController : EnemyController
     [SerializeField] private float slowMultiplier, slowDuration;
     protected override void Damaging() 
     {
-        if (player.state != PlayerController.States.Swallowed)
+        if (_player.state != PlayerController.States.Swallowed)
         {
-            player.ChangeHealth(-damage);
-            audioSource.PlayOneShot(attackSound);
-            player.ChangeState(PlayerController.States.Slowed, slowDuration, slowMultiplier);
+            _player.ChangeHealth(-damage);
+            _audioSource.PlayOneShot(_attackSound);
+            _player.ChangeState(PlayerController.States.Slowed, slowDuration, slowMultiplier);
             nextHit = Time.time + attackDelay;
             state = States.DamageDone;
         }
@@ -20,19 +20,19 @@ public class SlowingEnemyController : EnemyController
         {
             case States.Chasing:
                 if (Time.time > nextHit)
-                    Moving(GetLookDir(player.gameObject));
+                    _moving.Moving(_moving.GetLookDir(_player.gameObject));
                 break;
             case States.DamageDone:
                 if (Time.time > nextHit) state = States.Chasing;
-                else Moving(-GetLookDir(player.gameObject));
+                else _moving.Moving(-_moving.GetLookDir(_player.gameObject));
                 break;
         }
     }
     private override protected void Death()
     {
-        spawnManager.EnemyDead();
-        gameManager.ChangeScore(scorePoints);
-        Destroy(gameObject);
+        _spawnManager.EnemyDead();
+        _gameManager.ChangeScore(scorePoints);
+        PlayDeathAnimation();
     }
 
     public override void Hit(int amount)
@@ -40,7 +40,7 @@ public class SlowingEnemyController : EnemyController
         health -= amount;
         if (health < 1)
         {
-             if (onDeathDrop) player.ChangeState(PlayerController.States.Boosted, slowDuration, slowMultiplier);
+             if (onDeathDrop) _player.ChangeState(PlayerController.States.Boosted, slowDuration, slowMultiplier);
              Death();
         }
     }

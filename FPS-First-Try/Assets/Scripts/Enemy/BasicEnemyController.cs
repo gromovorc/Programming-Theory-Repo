@@ -8,28 +8,28 @@ public class BasicEnemyController : EnemyController
         {
             case States.Chasing:
                 if (Time.time > nextHit)
-                    Moving(GetLookDir(player.gameObject));
+                    _moving.Moving(_moving.GetLookDir(_player.gameObject));
                 break;
             case States.DamageDone:
                 if (Time.time > nextHit) state = States.Chasing;
-                else gameObject.transform.position += -transform.forward * (moveSpeed / 2) * Time.deltaTime;
+                else gameObject.transform.position += -transform.forward * (_moving.moveSpeed / 2) * Time.deltaTime;
                 break;
         }
     }
 
     protected override void Damaging()
     { 
-        audioSource.PlayOneShot(attackSound);
-        player.ChangeHealth(-damage);
+        _audioSource.PlayOneShot(_attackSound);
+        _player.ChangeHealth(-damage);
         nextHit = Time.time + attackDelay;
         state = States.DamageDone;
     }
     
     private override protected void Death()
     {
-        spawnManager.EnemyDead();
-        gameManager.ChangeScore(scorePoints);
-        if (onDeathDrop) spawnManager.SpawnSpecialEnemy();
-        Destroy(gameObject);
+        _spawnManager.EnemyDead();
+        _gameManager.ChangeScore(scorePoints);
+        if (onDeathDrop) _spawnManager.SpawnSpecialEnemy();
+        PlayDeathAnimation();
     }
 }

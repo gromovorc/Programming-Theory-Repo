@@ -12,9 +12,9 @@ public class HealingEnemyController : EnemyController
 
     new private void Start()
     {
-        audioSource.volume *= MenuUIManager.volume;
+        _audioSource.volume *= MenuUIManager.volume;
         InvokeRepeating(nameof(Damaging), 0.5f, 10.0f);
-        OnWaveIncrease(spawnManager.waveCount);
+        OnWaveIncrease(_spawnManager.waveCount);
         if (UnityEngine.Random.Range(1, 20) == 1) onDeathDrop = true;
     }
 
@@ -23,7 +23,7 @@ public class HealingEnemyController : EnemyController
         switch (state)
         {
             case States.Chasing:
-                Moving(GetLookDir(player.gameObject));
+                _moving.Moving(_moving.GetLookDir(_player.gameObject));
                 break;
             case States.SpecialAttack:
                 {
@@ -32,7 +32,7 @@ public class HealingEnemyController : EnemyController
                         try
                         {
                             healthPack = FindObjectOfType<HealthPack>().GetComponent<HealthPack>();
-                            Moving(GetLookDir(healthPack.gameObject));
+                            _moving.Moving(_moving.GetLookDir(healthPack.gameObject));
                         }
                         catch (Exception)
                         {
@@ -46,7 +46,7 @@ public class HealingEnemyController : EnemyController
             case States.DamageDone:
                 {
                     if (Time.time > nextHit) state = States.Chasing;
-                    else Moving(-GetLookDir(player.gameObject));
+                    else _moving.Moving(-_moving.GetLookDir(_player.gameObject));
                     break;
                 }
                 }
@@ -55,7 +55,7 @@ public class HealingEnemyController : EnemyController
     protected override void Damaging()
     {
         Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, radius);
-        audioSource.PlayOneShot(healSound);
+        _audioSource.PlayOneShot(healSound);
         foreach (Collider collider in hitColliders)
         {
             EnemyController enemy = collider.GetComponent<EnemyController>();
@@ -69,7 +69,7 @@ public class HealingEnemyController : EnemyController
     {
         if (other.transform.CompareTag("Player"))
         {
-            moveSpeed += 0.1f;
+            _moving.moveSpeed += 0.1f;
             nextHit = Time.time + attackDelay;
             state = States.DamageDone;
         }
@@ -88,8 +88,8 @@ public class HealingEnemyController : EnemyController
 
     private override protected void Death()
     {
-        gameManager.ChangeScore(scorePoints);
-        if (onDeathDrop) spawnManager.SpawnHealthPack();
-        Destroy(gameObject);
+        _gameManager.ChangeScore(scorePoints);
+        if (onDeathDrop) _spawnManager.SpawnHealthPack();
+        PlayDeathAnimation();
     }
 }
