@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a705ee5c669436d498f9299d4a5f7e70, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -150,9 +150,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepTime: 0.8
   specialSoundTime: 45
-  audioSource: {fileID: 4586396467806667990}
+  _audioSource: {fileID: 0}
   stepSound: {fileID: 8300000, guid: 5e0fe368d9a158a46b0fe96e660e78cc, type: 3}
   specialSound: {fileID: 8300000, guid: 38313662dee2340dea2d9d6d5362f42f, type: 3}
+  isDead: 0
 --- !u!82 &4586396467806667990
 AudioSource:
   m_ObjectHideFlags: 0
@@ -277,6 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 509944dd1d4ca6748ac1c0a749b30141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHitIncrease: 0
   moveSpeed: 4.5
   turnSpeed: 2
 --- !u!1 &6723409487512576437
@@ -289,7 +291,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6723409487512576439}
   m_Layer: 0
-  m_Name: BasicEnemy_parent
+  m_Name: BasicEnemy_Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -303,7 +305,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6723409487512576437}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 10}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6723409487405929028}

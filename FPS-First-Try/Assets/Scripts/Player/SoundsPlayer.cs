@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class SoundsPlayer : MonoBehaviour
 {
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip[] stepSounds;
-    [SerializeField] private AudioClip pickUpSound;
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip[] _stepSounds;
+    [SerializeField] private AudioClip _pickUpSound;
 
     private float stepTime;
     public bool isCanStep;
@@ -15,7 +15,7 @@ public class SoundsPlayer : MonoBehaviour
     private void Start()
     {
         stepDuration = basicStepDuration;
-        audioSource.volume *= MenuUIManager.volume;
+        _audioSource.volume *= MenuUIManager.volume;
     }
 
     private void Update()
@@ -25,7 +25,7 @@ public class SoundsPlayer : MonoBehaviour
             {
                 if (Time.time > stepTime)
                 {
-                    audioSource.PlayOneShot(stepSounds[Random.Range(0, stepSounds.Length)]);
+                    _audioSource.PlayOneShot(_stepSounds[Random.Range(0, _stepSounds.Length)]);
                     stepTime = Time.time + stepDuration;
                 }
             }
@@ -36,15 +36,15 @@ public class SoundsPlayer : MonoBehaviour
     {
         if (isIncrementing)
         {
-            stepDuration = stepSounds[0].length;
+            stepDuration = _stepSounds[0].length;
         }
         else
         {
-            stepDuration = stepSounds[0].length * 2;
+            stepDuration = _stepSounds[0].length * 2;
         }
     }
 
     public void ChangeToNormal() => stepDuration = basicStepDuration;
     
-    public void PlayPickUpSound() => audioSource.PlayOneShot(pickUpSound);
+    public void PlayPickUpSound() => _audioSource.PlayOneShot(_pickUpSound);
 }

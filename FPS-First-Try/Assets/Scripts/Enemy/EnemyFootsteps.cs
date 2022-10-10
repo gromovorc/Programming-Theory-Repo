@@ -6,19 +6,24 @@ public class EnemyFootsteps : MonoBehaviour
 {
     [SerializeField]private float stepTime, specialSoundTime;
     private float nextStep, nextSpecialSoundTime;
-    [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClip stepSound, specialSound;
+
+    [SerializeField] AudioSource _audioSource;
+    [SerializeField] AudioClip _stepSound, _specialSound;
+
+    public bool isDead = false;
 
     void Update()
     {
-        if (Time.time > nextSpecialSoundTime && !audioSource.isPlaying)
+        if (isDead) _audioSource.Stop();
+        else
+        if (Time.time > nextSpecialSoundTime && !_audioSource.isPlaying)
         {
-            audioSource.PlayOneShot(specialSound);
+            _audioSource.PlayOneShot(_specialSound);
             nextSpecialSoundTime = Time.time + specialSoundTime;
         }
-        else if (Time.time > nextStep && !audioSource.isPlaying)
+        else if (Time.time > nextStep && !_audioSource.isPlaying)
         {
-            audioSource.PlayOneShot(stepSound);
+            _audioSource.PlayOneShot(_stepSound);
             nextStep = Time.time + stepTime;
         }
     }

@@ -311,7 +311,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timerImage: {fileID: 0}
   basicMovingSpeed: 6.5
-  sensitivity: 3
   timeInvincible: 2.5
   isInvincible: 0
   state: 0
@@ -500,7 +499,8 @@ PrefabInstance:
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 1929210337081246900}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1063816135455577483, guid: 6423a9106e633b449a5ed0688557f3a4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6423a9106e633b449a5ed0688557f3a4, type: 3}
 --- !u!1 &3581317811145947944 stripped
 GameObject:

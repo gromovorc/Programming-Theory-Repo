@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    [SerializeField] private UnityEngine.UI.Text ammoText;
-    [SerializeField] private UnityEngine.UI.Image ammoImage;
+    [SerializeField] private UnityEngine.UI.Text _ammoText;
+    [SerializeField] private UnityEngine.UI.Image _ammoImage;
 
-    [SerializeField] private GameObject muzzlePrefabFlash;
-    [SerializeField] private GameObject muzzleOffset;
+    [SerializeField] private GameObject _muzzlePrefabFlash;
+    [SerializeField] private GameObject _muzzleOffset;
 
-    [SerializeField] private AudioClip gunShot;
-    [SerializeField] private AudioClip gunReady;
-    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip _gunShot;
+    [SerializeField] private AudioClip _gunReady;
+    [SerializeField] private AudioSource _audioSource;
     public enum ShootingState
     {
         Ready,
@@ -36,9 +36,9 @@ public class Gun : MonoBehaviour
 
     private void Start()
     {
-        audioSource.volume *= MenuUIManager.volume;
+        _audioSource.volume *= MenuUIManager.volume;
         remainingAmmunition = ammunition;
-        ammoText.text = $"{remainingAmmunition} / {ammunition}";
+        _ammoText.text = $"{remainingAmmunition} / {ammunition}";
     }
     private void Update()
     {
@@ -51,15 +51,15 @@ public class Gun : MonoBehaviour
                 }
                 break;
             case ShootingState.Reloading:
-                if (!ammoImage.gameObject.activeInHierarchy) ammoImage.gameObject.SetActive(true);
+                if (!_ammoImage.gameObject.activeInHierarchy) _ammoImage.gameObject.SetActive(true);
                 ReloadTimerDisplay();
                 if (Time.time > nextShootTime)
                 {
                     remainingAmmunition = ammunition;
-                    ammoText.text = $"{remainingAmmunition} / {ammunition}";
-                    ammoImage.gameObject.SetActive(false);
+                    _ammoText.text = $"{remainingAmmunition} / {ammunition}";
+                    _ammoImage.gameObject.SetActive(false);
                     shootingState = ShootingState.Ready;
-                    audioSource.PlayOneShot(gunReady);
+                    _audioSource.PlayOneShot(_gunReady);
                 }
                 break;
         }
@@ -71,10 +71,10 @@ public class Gun : MonoBehaviour
             GameObject spawnedBullet = ObjectPool.SharedInstance.GetPooledObject();
             if (spawnedBullet != null)
             {
-                spawnedBullet.transform.position = muzzleOffset.transform.position;
-                spawnedBullet.transform.rotation = muzzleOffset.transform.rotation;
+                spawnedBullet.transform.position = _muzzleOffset.transform.position;
+                spawnedBullet.transform.rotation = _muzzleOffset.transform.rotation;
                 spawnedBullet.SetActive(true);
-                Instantiate(muzzlePrefabFlash, muzzleOffset.transform);
+                Instantiate(_muzzlePrefabFlash, _muzzleOffset.transform);
             }
 
             spawnedBullet.transform.Rotate(new Vector3(
@@ -83,10 +83,10 @@ public class Gun : MonoBehaviour
                
             Rigidbody ammoRb = spawnedBullet.GetComponent<Rigidbody>();
             ammoRb.velocity = spawnedBullet.transform.forward * roundSpeed;
-            audioSource.PlayOneShot(gunShot);   
+            _audioSource.PlayOneShot(_gunShot);   
 
             remainingAmmunition--;
-            ammoText.text = $"{remainingAmmunition} / {ammunition}";
+            _ammoText.text = $"{remainingAmmunition} / {ammunition}";
             if (remainingAmmunition > 0)
             {
                 nextShootTime = Time.time + (1 / fireRate);
@@ -105,7 +105,7 @@ public class Gun : MonoBehaviour
         {
             nextShootTime = Time.time + reloadTime;
             remainingReloadTime = reloadTime;
-            ammoText.text = $"Reloading";
+            _ammoText.text = $"Reloading";
             shootingState = ShootingState.Reloading;
         }
     }
@@ -113,7 +113,7 @@ public class Gun : MonoBehaviour
     private void ReloadTimerDisplay()
     {
         remainingReloadTime -= Time.deltaTime;
-        ammoImage.fillAmount = Mathf.Clamp01(remainingReloadTime / reloadTime);
+        _ammoImage.fillAmount = Mathf.Clamp01(remainingReloadTime / reloadTime);
 
     }
 }

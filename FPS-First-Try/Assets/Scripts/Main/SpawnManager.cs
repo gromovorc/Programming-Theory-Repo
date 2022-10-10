@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] enemyPrefabs;
-    [SerializeField] private GameObject specialEnemyPrefab, healthPackPrefab;
+    [SerializeField] private GameObject[] _enemyPrefabs;
+    [SerializeField] private GameObject _specialEnemyPrefab, _healthPackPrefab;
     private int spawnIndex, count;
     private float healthPoint = 9.0f;
     private Transform[] spawnpoints;
@@ -25,9 +25,9 @@ public class SpawnManager : MonoBehaviour
     {
         for (int i = 0; i < enemysSpawned; i++)
         {
-            spawnIndex = Random.Range(0, enemyPrefabs.Length);
+            spawnIndex = Random.Range(0, _enemyPrefabs.Length);
             var randomIndex = Random.Range(0, count);
-            Instantiate(enemyPrefabs[spawnIndex], spawnpoints[randomIndex].position, enemyPrefabs[spawnIndex].transform.rotation);
+            Instantiate(_enemyPrefabs[spawnIndex], spawnpoints[randomIndex].position, _enemyPrefabs[spawnIndex].transform.rotation);
             enemysLeft++;
         }
         enemysSpawned++;
@@ -36,13 +36,13 @@ public class SpawnManager : MonoBehaviour
     public void SpawnHealthPack()
     {
         Vector3 randomPosition = new Vector3 (Random.Range(-healthPoint, healthPoint), 1.0f, Random.Range(-healthPoint, healthPoint));
-        Instantiate(healthPackPrefab, randomPosition, healthPackPrefab.transform.rotation);
+        Instantiate(_healthPackPrefab, randomPosition, _healthPackPrefab.transform.rotation);
     }
 
     public void SpawnSpecialEnemy()
     {
         Vector3 randomPosition = new Vector3(Random.Range(-healthPoint, healthPoint), 5.0f, Random.Range(-healthPoint, healthPoint));
-        Instantiate(specialEnemyPrefab, randomPosition, specialEnemyPrefab.transform.rotation);
+        Instantiate(_specialEnemyPrefab, randomPosition, _specialEnemyPrefab.transform.rotation);
     }
 
     public void EnemyDead()

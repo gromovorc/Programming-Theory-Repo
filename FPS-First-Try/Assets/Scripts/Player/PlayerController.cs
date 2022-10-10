@@ -3,11 +3,11 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    private Gun gun;
-    private GameManager gameManager;
-    private SoundsPlayer sound;
+    private Gun _gun;
+    private GameManager _gameManager;
+    private SoundsPlayer _sound;
 
-    [SerializeField] private Image timerImage;
+    [SerializeField] private Image _timerImage;
 
     [Header("Basic Information")]
     public float basicMovingSpeed;
@@ -49,36 +49,36 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        gun = GetComponentInChildren<Gun>();
-        gameManager = FindObjectOfType<GameManager>().GetComponent<GameManager>();
-        sound = GetComponent<SoundsPlayer>();
+        _gun = GetComponentInChildren<Gun>();
+        _gameManager = FindObjectOfType<GameManager>().GetComponent<GameManager>();
+        _sound = GetComponent<SoundsPlayer>();
     }
 
     private void Start()
     {
         currentHealth = maxHealth;
         currentMovingSpeed = basicMovingSpeed; currentTurningSpeed = MenuUIManager.sensitivity;
-        gameManager.healthText.text = $"Health: {currentHealth}";
+        _gameManager.healthText.text = $"Health: {currentHealth}";
     }
 
     private void Update()
     {
-        if (!gameManager.m_gameOver)
+        if (!_gameManager.m_gameOver)
         {
             
             PlayerBehavior();
             MouseMove();
             if (state != States.Swallowed)
             {
-                if (Input.GetMouseButton(0)) gun.Shoot();
-                if (Input.GetKeyDown(KeyCode.R) && gun.remainingAmmunition != gun.ammunition) gun.Reload();
+                if (Input.GetMouseButton(0)) _gun.Shoot();
+                if (Input.GetKeyDown(KeyCode.R) && _gun.remainingAmmunition != _gun.ammunition) _gun.Reload();
             }
         }
     }
 
     private void FixedUpdate()
     {
-        if (!gameManager.m_gameOver) PlayerMove();
+        if (!_gameManager.m_gameOver) PlayerMove();
     }
 
     private void PlayerBehavior()
@@ -90,10 +90,10 @@ public class PlayerController : MonoBehaviour
                 break;
             case States.Swallowed:
                 TimerDisplay(Color.green);
-                if (sound.isCanStep) sound.isCanStep = false;
+                if (_sound.isCanStep) _sound.isCanStep = false;
                 if (debuffTimer < 0)
                 {
-                    sound.isCanStep = true;
+                    _sound.isCanStep = true;
                     ChangeState();
                 }
                 break;
@@ -106,7 +106,7 @@ public class PlayerController : MonoBehaviour
                 TimerDisplay(Color.magenta);
                 if (debuffTimer < 0)
                 {
-                    sound.ChangeToNormal();
+                    _sound.ChangeToNormal();
                     ChangeState();
                 }
                 break;
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
                 TimerDisplay(Color.yellow);
                 if (debuffTimer < 0)
                 {
-                    sound.ChangeToNormal();
+                    _sound.ChangeToNormal();
                     ChangeState();
                 }
                 break;
@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour
     {
         if (health < 1)
         {
-            gameManager.GameOver();
+            _gameManager.GameOver();
         }
         if (amount < 0 && state != PlayerController.States.Swallowed)
         {
@@ -162,15 +162,15 @@ public class PlayerController : MonoBehaviour
         } 
         else if (amount > 0) 
         {
-            sound.PlayPickUpSound();
+            _sound.PlayPickUpSound();
         }
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        gameManager.healthText.text = $"Health: {currentHealth}";
+        _gameManager.healthText.text = $"Health: {currentHealth}";
     }
 
     public void ChangeState(States neededState = States.Normal)
     {
-        timerImage.gameObject.SetActive(false);
+        _timerImage.gameObject.SetActive(false);
         state = neededState;
     }
     public void ChangeState(States neededState, float duration, float multiplier = 0.0f)
@@ -179,8 +179,8 @@ public class PlayerController : MonoBehaviour
         debuffTime = duration;
         debuffTimer = debuffTime;
         debuffMultiplier = multiplier;
-        timerImage.gameObject.SetActive(true);
-        timerImage.GetComponentInChildren<Text>().text = neededState.ToString();
+        _timerImage.gameObject.SetActive(true);
+        _timerImage.GetComponentInChildren<Text>().text = neededState.ToString();
     }
 
     public void ChangeSpeed(bool isIncrementing = true)
@@ -189,24 +189,24 @@ public class PlayerController : MonoBehaviour
         {
             currentMovingSpeed *= debuffMultiplier;
             currentTurningSpeed *= debuffMultiplier;
-            sound.ChangeStepTime(true);
+            _sound.ChangeStepTime(true);
         }
         else
         {
             currentMovingSpeed /= debuffMultiplier;
             currentTurningSpeed /= debuffMultiplier;
-            sound.ChangeStepTime(false);
+            _sound.ChangeStepTime(false);
         }
     }
 
     private void TimerDisplay(Color color)
     {
         debuffTimer -= Time.deltaTime;
-        timerImage.fillAmount = Mathf.Clamp01(debuffTimer / debuffTime);
-        if (timerImage.color != color)
+        _timerImage.fillAmount = Mathf.Clamp01(debuffTimer / debuffTime);
+        if (_timerImage.color != color)
         {
-            timerImage.color = color;
-            timerImage.GetComponentInChildren<Text>().color = color;
+            _timerImage.color = color;
+            _timerImage.GetComponentInChildren<Text>().color = color;
         }
     }
 }

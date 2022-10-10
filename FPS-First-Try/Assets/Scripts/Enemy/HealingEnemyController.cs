@@ -6,7 +6,7 @@ public class HealingEnemyController : EnemyController
     HealthPack healthPack;
     [SerializeField] private int healAmount;
     [SerializeField] private float radius, healingRate;
-    [SerializeField] private AudioClip healSound;
+    [SerializeField] private AudioClip _healSound;
 
     private bool needHealing;
 
@@ -55,7 +55,7 @@ public class HealingEnemyController : EnemyController
     protected override void Damaging()
     {
         Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, radius);
-        _audioSource.PlayOneShot(healSound);
+        _audioSource.PlayOneShot(_healSound);
         foreach (Collider collider in hitColliders)
         {
             EnemyController enemy = collider.GetComponent<EnemyController>();

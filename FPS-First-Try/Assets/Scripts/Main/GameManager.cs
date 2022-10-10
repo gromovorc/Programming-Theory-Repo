@@ -11,13 +11,13 @@ public class GameManager : MonoBehaviour
     public float volume;
 
     public Text healthText, scoreText;
-    [SerializeField] private GameObject gameOverText;
-    [SerializeField] private Text playerName;
+    [SerializeField] private GameObject _gameOverText;
+    [SerializeField] private Text _playerName;
 
     private void Start()
     {
         currentScore = 0;
-        playerName.text = SceneFlow.Instance.playerName;
+        _playerName.text = SceneFlow.Instance.playerName;
         scoreText.text = $"Score: {currentScore}";
     }
 
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         }
         m_gameOver = true;
 
-        gameOverText.SetActive(true);
+        _gameOverText.SetActive(true);
     }
     public void ChangeScore(int amount)
     {

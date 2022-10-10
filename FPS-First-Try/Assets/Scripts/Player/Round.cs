@@ -5,16 +5,16 @@ using UnityEngine;
 public class Round : MonoBehaviour
 {
     public int damage;
-    private TrailRenderer trail;
+    private TrailRenderer _trail;
 
     private void Awake()
     {
-        trail = GetComponent<TrailRenderer>();
+        _trail = GetComponent<TrailRenderer>();
     }
 
     private void OnEnable()
     {
-        trail.Clear();
+        _trail.Clear();
     }
     private void OnCollisionEnter(Collision other)
     {
